@@ -1,34 +1,44 @@
 package com.lbg.library.domain;
 
-import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToOne;
 
 @Entity
-public abstract class Item implements Comparable<Item> {
+public class Item {
 
-	public abstract String size();
+//	public abstract String size();
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+
 	private String title;
+
 	private String author;
+
 	private int pages;
+
 	private boolean available;
 
-	@JsonManagedReference
-	@OneToMany(mappedBy = "item")
-	private List<Person> Players;
+	@JsonBackReference
+	@ManyToOne
+	private Person person;
 
 	public Item() {
 		super();
+	}
+
+	public Person getPerson() {
+		return person;
+	}
+
+	public void setPerson(Person person) {
+		this.person = person;
 	}
 
 	public int getId() {
@@ -73,13 +83,7 @@ public abstract class Item implements Comparable<Item> {
 
 	@Override
 	public String toString() {
-		return "Item [id=" + id + ", Title=" + title + ", Author=" + author + ", Pages=" + pages + ", Available="
-				+ available + "]";
+		return "[id=" + id + ", Title=" + title + ", Author=" + author + ", Pages=" + pages + ", Available=" + available
+				+ "]";
 	}
-
-	@Override
-	public int compareTo(Item o) {
-		return id - o.id;
-	}
-
 }

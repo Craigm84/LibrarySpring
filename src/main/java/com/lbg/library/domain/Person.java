@@ -1,12 +1,14 @@
 package com.lbg.library.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Person {
@@ -19,9 +21,25 @@ public class Person {
 
 	private String lastName;
 
-	@JsonBackReference
-	@ManyToOne
-	private Item item;
+	@JsonManagedReference
+	@OneToMany(mappedBy = "person")
+	private List<Item> items;
+
+	public Person() {
+		super();
+	}
+
+	public Person(int personId) {
+		super();
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
 	public String getFirstName() {
 		return firstName;

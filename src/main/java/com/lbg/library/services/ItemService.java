@@ -9,15 +9,18 @@ import org.springframework.stereotype.Service;
 
 import com.lbg.library.domain.Item;
 import com.lbg.library.repo.ItemRepo;
+import com.lbg.library.repo.PersonRepo;
 
 @Service
 public class ItemService {
 
 	private ItemRepo repo;
+	private PersonRepo personRepo;
 
-	public ItemService(ItemRepo repo) {
+	public ItemService(ItemRepo repo, PersonRepo personRepo) {
 		super();
 		this.repo = repo;
+		this.personRepo = personRepo;
 	}
 
 	public ResponseEntity<Item> createItem(Item newItem) {
@@ -44,7 +47,7 @@ public class ItemService {
 		return !this.repo.existsById(id);
 	}
 
-	public ResponseEntity<Item> updatePlayer(int id, Item newItem) {
+	public ResponseEntity<Item> updateItem(int id, Item newItem) {
 		Optional<Item> found = this.repo.findById(id);
 
 		if (found.isEmpty()) {
@@ -64,9 +67,25 @@ public class ItemService {
 			existing.setPages(newItem.getPages());
 		}
 
+		if (newItem.getPerson() != null)
+			existing.setPerson(newItem.getPerson());
+
 		Item updated = this.repo.save(existing);
 
 		return ResponseEntity.ok(updated);
+	}
+
+	public ResponseEntity<Item> checkOutItem(int id, int personId) {
+		Optional<Item> found = this.repo.findById(id);
+
+		if (found.isEmpty()) {
+			return new ResponseEntity<Item>(HttpStatus.NOT_FOUND);
+		}
+		Item body = found.get();
+
+		body.setPerson(this.personRepo.findById(personId).get());
+		return ResponseEntity.ok(this.repo.save(body));
+
 	}
 
 }

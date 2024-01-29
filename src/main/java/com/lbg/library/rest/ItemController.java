@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -16,13 +17,14 @@ import com.lbg.library.domain.Item;
 import com.lbg.library.services.ItemService;
 
 @RestController
-@RequestMapping
+@RequestMapping("/item")
 public class ItemController {
 
 	private ItemService service;
 
 	public ItemController(ItemService service) {
 		super();
+		this.service = service;
 	}
 
 	@PostMapping("/create")
@@ -47,6 +49,12 @@ public class ItemController {
 
 	@PutMapping("/update/{id}")
 	public ResponseEntity<Item> updateItem(@PathVariable int id, @RequestBody Item newItem) {
-		return this.service.updatePlayer(id, newItem);
+		return this.service.updateItem(id, newItem);
+	}
+
+	@PatchMapping("/checkOut/{id}/{personId}")
+	public ResponseEntity<Item> checkOut(@PathVariable int id, @PathVariable int personId) {
+		return this.service.checkOutItem(id, personId);
+
 	}
 }

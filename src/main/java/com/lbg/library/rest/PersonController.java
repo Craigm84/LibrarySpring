@@ -16,7 +16,7 @@ import com.lbg.library.domain.Person;
 import com.lbg.library.services.PersonService;
 
 @RestController
-@RequestMapping("person")
+@RequestMapping("/person")
 public class PersonController {
 
 	private PersonService service;
@@ -39,11 +39,10 @@ public class PersonController {
 	@GetMapping("/get/{id}")
 	public ResponseEntity<Person> getPerson(@PathVariable int id) {
 		return this.service.getPerson(id);
-
 	}
 
-	@DeleteMapping("/delete{id}")
-	public Boolean deletePerson(@PathVariable int id) {
+	@DeleteMapping("/delete/{id}")
+	public boolean deletePerson(@PathVariable int id) {
 		return this.service.deletePerson(id);
 	}
 
