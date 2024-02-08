@@ -85,7 +85,6 @@ public class ItemService {
 
 		body.setPerson(this.personRepo.findById(personId).get());
 		return ResponseEntity.ok(this.repo.save(body));
-
 	}
 
 }
